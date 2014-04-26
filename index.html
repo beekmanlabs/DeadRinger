@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DeadRinger</title>
+    <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/lumen/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>DeadRinger</h1>
+
+        <div class="lead">Windows console program that wraps legacy scripts and other console programs.</div>
+        <a class="btn btn-primary" href="https://github.com/ethanhann/DeadRinger">
+            <i class="fa fa-github fa-fw fa-lg"></i>Code on GitHub
+        </a>
+        <a class="btn btn-primary" href="https://github.com/ethanhann/DeadRinger/zipball/master">
+            <i class="fa fa-download fa-fw fa-lg"></i>ZIP</a>
+        <a class="btn btn-primary" href="https://github.com/ethanhann/DeadRinger/tarball/master">
+            <i class="fa fa-download fa-fw fa-lg"></i>TAR
+        </a>
+    </div>
+</div>
+<div class="container">
+    <h2>Why should you care?</h2>
+
+    <p>Many (especially 3rd party) Windows scripts and console programs do not write to the Windows event log or <em>even</em>
+        to a log file.
+        This of course makes debugging difficult if, for example, you are running a script on thousands of endpoints via
+        Group Policy.
+        You have to <em>hope</em> that it completes successfully.</p>
+
+    <p><strong>DeadRinger is here to help!</strong></p>
+
+    <p>DeadRinger writes the stdout and stderr streams of your legacy program or script to the Windows event log.
+        You can also configure DeadRinger to write the result of the streams to many other targets (e.g. email, remote
+        server, file). Thanks <a href="http://logging.apache.org/log4net">Apache log4net</a>!
+    </p>
+
+    <p>But wait, there is more. DeadRinger can also delay execution of the app it wraps by some amount of time you
+        specify.
+        This makes sense to do if you desire to stagger the execution of your script on multiple endpoints, but don't
+        really care <em>exactly</em> when it runs.</p>
+
+    <h2>How does it work?</h2>
+    <p>DeadRinger log messages will appear in the Windows event log as "DeadRinger" events.
+        If you are running DeadRinger for the first time on an endpoint, you must run it with admin privileges.
+        This causes the "DeadRinger" source to be created in the event log.
+        DeadRinger events will not appear in the event log if you do not do this.
+    </p>
+
+    <p>Basic usage looks like this:</p>
+    <pre><code class="dos">C:\>DeadRinger.exe -pC:\foo\bar.exe</code></pre>
+
+    <p>With a random execution delay of up to 15 minutes:</p>
+    <pre><code class="dos">C:\>DeadRinger.exe -pC:\foo\bar.exe -d900000</code></pre>
+
+    <p>With optional arguments for the wrapped app (bar.exe in this case):</p>
+    <pre><code class="dos">C:\>DeadRinger.exe -pC:\foo\bar.exe -a"--baz=qux"</code></pre>
+
+    <h2>How do I write to other targets?</h2>
+
+    <p>This is where Apache log4net comes into play.
+        You will need to add the appropriate appender to DeadRinger's <a
+                href="https://github.com/ethanhann/DeadRinger/blob/master/DeadRinger/App.config">App.config</a> file.
+        The log4net documentation has many <a href="http://logging.apache.org/log4net/release/config-examples.html">config
+            examples</a> for a variety of appenders.
+    </p>
+
+    <h2>How is this software licensed?</h2>
+
+    <p><a href="https://github.com/ethanhann/DeadRinger/blob/master/LICENSE">GPL v3</a></p>
+</div>
+<div class="container text-center">
+    <hr>
+    <p>Created by <a href="https://github.com/ethanhann">Ethan Hann</a></p>
+</div>
+</body>
+</html>
