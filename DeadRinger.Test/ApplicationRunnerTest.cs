@@ -12,7 +12,7 @@ namespace DeadRinger.Test
         {
             var subject = new ApplicationRunner();
 
-            subject.Execute(new string[1] {"bad args"});
+            subject.Execute("bad args");
 
             Assert.IsNull(subject.Options.Path);
             Assert.IsNull(subject.Options.Arguments);
@@ -24,7 +24,7 @@ namespace DeadRinger.Test
         {
             var subject = new ApplicationRunner();
 
-            subject.Execute(new string[3] { "-pfoo.exe", "-d10", "-ablah" });
+            subject.Execute("-pfoo.exe", "-d10", "-ablah");
 
             Assert.That(subject.Options.Path, Is.EqualTo("foo.exe"));
             Assert.That(subject.Options.Arguments, Is.EqualTo("blah"));
@@ -41,7 +41,7 @@ namespace DeadRinger.Test
             mockLog.Setup(x => x.Error(It.IsAny<string>()));
             var message = String.Format("Cannot run {0}. It either does not exist or is inaccessible. Exiting...", path); ;
 
-            subject.Execute(new string[1] { "-p" + path });
+            subject.Execute("-p" + path);
 
             mockLog.Verify(x => x.Error(It.Is<string>(y => y == message)), Times.Once);
         }
@@ -49,15 +49,16 @@ namespace DeadRinger.Test
         [Test]
         public void ShouldLaunchProcessAndLogOutput()
         {
+            var isRunningOnMono = Type.GetType("Mono.Runtime") != null;
             var subject = new ApplicationRunner();
             var mockLog = new Mock<ILog>();
             subject.Log = mockLog.Object;
             mockLog.Setup(x => x.Info(It.IsAny<string>()));
-            var path = @"C:\Windows\System32\cscript.exe";
-            var arguments = @"foo.vbs";            
-            var expected = "Windows Script Host";
+            var path = isRunningOnMono ? "/bin/ls" : @"C:\Windows\System32\cscript.exe";
+            var arguments = isRunningOnMono ? "-l" : @"foo.vbs";            
+            var expected = isRunningOnMono ? "DeadRinger.Test.dll" : "Windows Script Host";
 
-            subject.Execute(new string[2] { "-p" + path, "-a" + arguments });
+            subject.Execute("-p" + path, "-a" + arguments);
 
             mockLog.Verify(x => x.Info(It.Is<string>(y => y.Contains(expected))), Times.Once);
         }
