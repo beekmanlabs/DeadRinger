@@ -1,0 +1,9 @@
+language: csharp
+solution: DeadRinger.sln
+
+sudo: false
+cache: apt
+
+script:
+  - xbuild /p:Configuration=Release DeadRinger.sln
+  - mono ./packages/NUnit.Runners.2.6.4/tools/nunit-console.exe ./DeadRinger.Test/bin/Release/DeadRinger.Test.dll

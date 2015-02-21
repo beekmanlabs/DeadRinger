@@ -7,7 +7,7 @@ namespace DeadRinger.Test
         [Test]
         public void ShouldRunSuccessfully()
         {
-            Program.Main(new string[1]);
+            Program.Main(string.Empty);
         }
     }
 }

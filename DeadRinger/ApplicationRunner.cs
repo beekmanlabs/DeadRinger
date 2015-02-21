@@ -16,7 +16,7 @@ namespace DeadRinger
             Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         }
 
-        public void Execute(string[] args)
+        public void Execute(params string[] args)
         {
             Options = new Options();
             if (!CommandLine.Parser.Default.ParseArguments(args, Options))
